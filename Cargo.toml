@@ -1,0 +1,53 @@
+[package]
+name = "cydia-substrate"
+version = "0.1.0"
+edition = "2021"
+authors = ["Cydia Substrate Rust Bindings Contributors"]
+license = "MIT"
+description = "Production-ready Rust bindings for Cydia Substrate - Function hooking and code injection for iOS/Android"
+documentation = "https://docs.rs/cydia-substrate"
+homepage = "https://github.com/rodroidmods/Substrate"
+repository = "https://github.com/rodroidmods/Substrate"
+readme = "README.md"
+keywords = ["hooking", "substrate", "injection", "ios", "android"]
+categories = ["api-bindings", "external-ffi-bindings", "development-tools"]
+exclude = [
+    "examples/*",
+    ".gitignore",
+    ".cargo/*",
+    "ADVANCED_FEATURES.md",
+    "COMPLETE_GUIDE.md",
+    "IMPLEMENTATION.md",
+    "FINAL_SUMMARY.md"
+]
+
+[lib]
+name = "cydia_substrate"
+crate-type = ["lib", "staticlib", "cdylib"]
+
+[dependencies]
+libc = "0.2"
+paste = "1.0"
+
+[build-dependencies]
+cc = "1.0"
+bindgen = "0.70"
+
+[target.'cfg(target_os = "android")'.dependencies]
+jni = "0.21"
+
+[target.'cfg(target_os = "ios")'.dependencies]
+objc = "0.2"
+
+[features]
+default = []
+debug = []
+substrate-internal = []
+advanced = []
+disassembler = []
+
+[profile.release]
+opt-level = 3
+lto = true
+codegen-units = 1
+strip = true
