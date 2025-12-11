@@ -96,7 +96,7 @@ pub type SubstrateMemoryRef = *mut SubstrateMemory;
 /// Reference to a custom allocator.
 pub type SubstrateAllocatorRef = *mut c_void;
 
-/// Low-level FFI bindings to Cydia Substrate C library.
+// Low-level FFI bindings to Cydia Substrate C library.
 #[link(name = "substrate", kind = "static")]
 extern "C" {
     /// Hook into another process by injecting a library.
