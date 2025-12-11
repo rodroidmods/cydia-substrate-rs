@@ -15,6 +15,7 @@ Production-ready Rust bindings for **Cydia Substrate**, the powerful code insert
 - 🤖 Android ELF symbol resolution
 - 🛠️ Automatic FFI generation with bindgen
 - 🔐 Memory-safe abstractions over unsafe C/C++
+- ⚡ Android ARM64 inline hooking (And64InlineHook)
 
 🚀 **Advanced Capabilities** (with features)
 - 📋 x86/x64 instruction disassembler (HDE64)
@@ -106,6 +107,14 @@ let addr = find_symbol_in_library(0, "malloc", "libc.so")?;
 let base = find_library_base(0, "libgame.so")?;
 ```
 
+#### Android ARM64 Inline Hooking
+```rust
+#[cfg(all(target_arch = "aarch64", target_os = "android"))]
+use cydia_substrate::and64::a64_hook_function;
+
+let original = a64_hook_function(symbol_ptr, hook_ptr).expect("Hook failed");
+```
+
 ### iOS
 ```rust
 use cydia_substrate::ios::ObjCHook;
@@ -156,12 +165,29 @@ cargo build --release --target x86_64-apple-ios
 
 - **iOS**: `ObjCHook` for Objective-C message hooking
 - **Android**: Symbol finding utilities for ELF binaries
+- **Android ARM64**: `and64` module for ARM64 inline hooking
+
+## What's New in v0.2.0
+
+- Added Android ARM64 inline hooking support (And64InlineHook)
+- New `and64` module with `a64_hook_function` and `a64_hook_function_v`
+- Improved ARM64 instruction relocation and fixing
+- Fast trampoline allocation for inline hooks
+- Automatic memory protection handling
+
+## Credits
+
+- **Rust Bindings**: Rodroid Dev
+- **Community**:
+  - Telegram Group: https://t.me/+QylrYL1GNsJiYjc0
+  - Telegram Channel: https://t.me/+WmudnO0-xoNhMDQ8
 
 ## License
 
 MIT License
 
 Original Cydia Substrate: GNU Lesser General Public License v3
+And64InlineHook: MIT License (Copyright (c) 2018 Rprop)
 
 ## Safety
 

@@ -55,7 +55,12 @@ fn main() {
         "x86_64" | "x86" => {
             build.file(substrate_src.join("hde64.c"));
         }
-        "aarch64" | "arm" => {}
+        "aarch64" => {
+            if target_os == "android" {
+                build.file(substrate_src.join("And64InlineHook.cpp"));
+            }
+        }
+        "arm" => {}
         _ => {}
     }
 
@@ -109,6 +114,13 @@ fn generate_bindings(substrate_src: &PathBuf, out_path: &PathBuf, target_os: &st
             .header(substrate_src.join("hde64.h").to_str().unwrap())
             .allowlist_function("hde64_disasm")
             .allowlist_type("hde64s");
+    }
+
+    if target_arch == "aarch64" && target_os == "android" {
+        builder = builder
+            .header(substrate_src.join("And64InlineHook.hpp").to_str().unwrap())
+            .allowlist_function("A64HookFunction")
+            .allowlist_function("A64HookFunctionV");
     }
 
     let bindings = builder

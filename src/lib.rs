@@ -29,6 +29,18 @@
 //! - `disassembler`: x86/x64 instruction disassembler
 //! - `substrate-internal`: Internal memory/process management
 //!
+//! ## Android ARM64 Inline Hooking
+//!
+//! On Android ARM64, the `and64` module provides additional inline hooking capabilities:
+//!
+//! ```rust,no_run
+//! #[cfg(all(target_arch = "aarch64", target_os = "android"))]
+//! use cydia_substrate::and64::a64_hook_function;
+//!
+//! #[cfg(all(target_arch = "aarch64", target_os = "android"))]
+//! let original = a64_hook_function(symbol_ptr, hook_ptr).expect("Hook failed");
+//! ```
+//!
 //! ## Safety
 //!
 //! This library provides `unsafe` FFI bindings. Users must ensure correct function
@@ -71,6 +83,9 @@ pub mod android;
 
 #[cfg(target_os = "ios")]
 pub mod ios;
+
+#[cfg(all(target_arch = "aarch64", target_os = "android"))]
+pub mod and64;
 
 /// Opaque reference to a loaded library image.
 pub type MSImageRef = *const c_void;
