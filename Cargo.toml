@@ -1,6 +1,6 @@
 [package]
 name = "cydia-substrate"
-version = "0.2.0"
+version = "0.2.1"
 edition = "2021"
 authors = ["Cydia Substrate Rust Bindings Contributors"]
 license = "MIT"
@@ -45,6 +45,11 @@ debug = []
 substrate-internal = []
 advanced = []
 disassembler = []
+
+[package.metadata.docs.rs]
+all-features = true
+targets = ["x86_64-unknown-linux-gnu", "aarch64-linux-android", "aarch64-apple-ios"]
+rustdoc-args = ["--cfg", "docsrs"]
 
 [profile.release]
 opt-level = 3
