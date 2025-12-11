@@ -35,14 +35,14 @@ Add to your `Cargo.toml`:
 
 ```toml
 [dependencies]
-cydia-substrate = "0.1"
+cydia-substrate = "0.2"
 ```
 
 Or with all features:
 
 ```toml
 [dependencies]
-cydia-substrate = { version = "0.1", features = ["advanced", "disassembler"] }
+cydia-substrate = { version = "0.2", features = ["advanced", "disassembler"] }
 ```
 
 ### Basic Example
