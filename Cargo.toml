@@ -1,0 +1,19 @@
+[package]
+name = "substrate"
+version = "0.1.0"
+edition = "2024"
+authors = ["rodroidmods"]
+description = "Pure Rust rewrite of Cydia Substrate + And64InlineHook — cross-architecture inline function hooking for Android"
+license = "LGPL-3.0-or-later"
+repository = "https://github.com/AchileDev/cydia-substrate-rs"
+readme = "README.md"
+keywords = ["hooking", "substrate", "android", "inline-hook", "arm64"]
+categories = ["os", "no-std", "api-bindings"]
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[dependencies]
+libc = "0.2.182"
+thiserror = "2.0.18"
+tracing = "0.1.44"
