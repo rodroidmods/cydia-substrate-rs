@@ -35,15 +35,19 @@
 //! }
 //! ```
 
+#[cfg(unix)]
 pub mod arch;
 pub mod buffer;
 pub mod debug;
 pub mod error;
 pub mod hde64;
 pub mod log;
+#[cfg(unix)]
 pub mod memory;
+#[cfg(unix)]
 pub mod symbol;
 
+#[cfg(unix)]
 use error::Result;
 
 /// Inline-hooks a function, redirecting calls from `symbol` to `replace`.
@@ -58,6 +62,7 @@ use error::Result;
 /// - `result` (if non-null) must point to a valid `*mut u8` location.
 /// - The caller must ensure no other thread is executing the patched prologue
 ///   during hook installation.
+#[cfg(unix)]
 pub unsafe fn hook_function(
     symbol: *mut u8,
     replace: *mut u8,
@@ -76,6 +81,7 @@ pub unsafe fn hook_function(
 /// - `pid` — Process ID (use `std::process::id() as i32` for self)
 /// - `name` — Symbol name (e.g., `"open"`)
 /// - `lib_name` — Library name (e.g., `"libc.so"`)
+#[cfg(unix)]
 pub fn find_symbol(pid: i32, name: &str, lib_name: &str) -> Result<usize> {
     symbol::find_name(pid, name, lib_name)
 }
@@ -83,6 +89,7 @@ pub fn find_symbol(pid: i32, name: &str, lib_name: &str) -> Result<usize> {
 /// Returns the base address of a loaded shared library.
 ///
 /// Parses `/proc/{pid}/maps` to find the mapping.
+#[cfg(unix)]
 pub fn find_lib_base(pid: i32, lib_name: &str) -> Result<usize> {
     symbol::find_libbase(pid, lib_name)
 }
@@ -95,6 +102,7 @@ pub fn find_lib_base(pid: i32, lib_name: &str) -> Result<usize> {
 /// # Safety
 ///
 /// `file` must be a valid null-terminated C string.
+#[cfg(unix)]
 pub unsafe fn get_image_by_name(file: *const libc::c_char) -> *mut libc::c_void {
     unsafe { libc::dlopen(file, libc::RTLD_NOLOAD | libc::RTLD_LAZY) }
 }
@@ -107,6 +115,7 @@ pub unsafe fn get_image_by_name(file: *const libc::c_char) -> *mut libc::c_void 
 ///
 /// - `image` must be a valid library handle from [`get_image_by_name`].
 /// - `name` must be a valid null-terminated C string.
+#[cfg(unix)]
 pub unsafe fn ms_find_symbol(
     image: *mut libc::c_void,
     name: *const libc::c_char,
@@ -148,11 +157,13 @@ pub fn get_instruction_width(start: *const u8) -> usize {
         target_arch = "x86_64"
     )))]
     {
+        let _ = start;
         0
     }
 }
 
 
+#[cfg(unix)]
 #[unsafe(no_mangle)]
 pub unsafe extern "C" fn MSHookFunction(
     symbol: *mut libc::c_void,
@@ -168,11 +179,13 @@ pub unsafe extern "C" fn MSHookFunction(
     };
 }
 
+#[cfg(unix)]
 #[unsafe(no_mangle)]
 pub unsafe extern "C" fn MSGetImageByName(file: *const libc::c_char) -> *mut libc::c_void {
     unsafe { get_image_by_name(file) }
 }
 
+#[cfg(unix)]
 #[unsafe(no_mangle)]
 pub unsafe extern "C" fn MSFindSymbol(
     image: *mut libc::c_void,
@@ -181,6 +194,7 @@ pub unsafe extern "C" fn MSFindSymbol(
     unsafe { ms_find_symbol(image, name) }
 }
 
+#[cfg(unix)]
 #[unsafe(no_mangle)]
 pub unsafe extern "C" fn MSGetInstructionWidth(start: *mut libc::c_void) -> usize {
     get_instruction_width(start as *const u8)
@@ -219,3 +233,4 @@ pub unsafe extern "C" fn A64HookFunctionV(
         ) as *mut libc::c_void
     }
 }
+
